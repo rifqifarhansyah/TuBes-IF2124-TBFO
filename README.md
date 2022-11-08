@@ -34,7 +34,7 @@ Pada tugas besar ini, telah diimplementasikan `parser JavaScript (Node.js)` untu
 
 <a name="structure"></a>
 
-## Stucture
+## Structure
 ```
 │   parser_main.py
 │   README.md
