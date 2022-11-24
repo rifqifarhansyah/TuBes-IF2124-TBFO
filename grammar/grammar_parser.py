@@ -11,6 +11,7 @@ def loadGrammar(grammarPath):
     
     rawProduction = P.replace("\n", "").split(";")
     rawProduction.pop()
+    rawProduction.pop()
     rawProduction.append('SEMICOLON -> ;')
     for production in rawProduction:
         lhs = production.split(" -> ")[0].replace(" ", '')
