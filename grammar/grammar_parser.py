@@ -14,7 +14,7 @@ def loadGrammar(grammarPath):
     rawProduction.append('SEMICOLON -> ;')
     for production in rawProduction:
         lhs = production.split(" -> ")[0].replace(" ", '')
-        rhs = production.split(" -> ")[1].split(" | ")
+        rhs = production.split(" -> ")[0].split(" | ")
         for term in rhs:
             pArr.append((lhs, (term.split(" "))))
     
