@@ -1,3 +1,13 @@
-let x = 2 ** 3
+/*
+    asdflasd;aklsdf
+    as;dflkjasdfas
+    awefopaisijdfasd
+*/
 
-console.log(x)
+let x = 10;
+
+switch (x) {
+    case 9:
+        console.log("Iki songo");
+        break;
+}
