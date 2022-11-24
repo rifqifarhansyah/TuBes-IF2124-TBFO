@@ -7,6 +7,13 @@ def isUnitProduction(prod, variables):
 def isSimpleForm(t, var, prod):
     return prod[left] in var and len(prod[right]) == 1 and prod[right][0] in t
 
+def generatingProduction(productions, terminals, variables):
+    result = {}
+    for production in productions:
+        if production[left] in variables and production[right][0] in terminals and len(production[right]) == 1:
+            result[production[right][0]] = production[left]
+    return result
+
 def removeUnitProduction(productions, variables):
     unitaries, result = [], []
     for production in productions:
@@ -17,7 +24,7 @@ def removeUnitProduction(productions, variables):
     for unitP in unitaries:
         for production in productions:
             if unitP[right] == production[left] and unitP[left] != production[left]:
-                result.append(unitP[left], production[right])
+                result.append((unitP[left], production[right]))
     return result
 
 def productionToDictionary(productions):
@@ -27,4 +34,71 @@ def productionToDictionary(productions):
             res[production[left]] = []
         res[production[left]].append(production[right])
     return res
+
+def convertToCNF(productions, terminals, variables):
+    
+    # Membuat sebuah start state
+    variables.append('S0')
+    productions = [('S0', variables[0])] + productions
+
+    # Hapus produksi yang menghasilkan variable dan terminal sekaligus
+    new_prod = []
+    dictionary = generatingProduction(productions, terminals, variables)
+    num = 1
+    for prod in productions:
+        if isSimpleForm(terminals, variables, prod):
+            new_prod.append(prod)
+        else:
+            for t in terminals:
+                for i, v in enumerate(prod[right]):
+                    if t == v and not t in dictionary:
+                        dictionary[t] = 'A' + str(num)
+                        num += 1
+                        variables.append(dictionary[t])
+                        new_prod.append((dictionary[t], t))
+                        prod[right][i] = dictionary[t]
+                    elif t == v:
+                        prod[right][i] = dictionary[t]
+            new_prod.append((prod[left], prod[right]))
+    productions = new_prod
+
+    # Meringkas semua produksi yang menghasilkan lebih dari dua variabel
+    result = []
+    for production in productions:
+        k = len(production[right])
+        if k <= 2:
+            result.append(production)
+        else:
+            curVar = 'A' + str(num)
+            variables.append(curVar+'1')
+            result.append((production[left], [production[right][0]]+[curVar+'1']))
+            for i in range(1, k-2 ):
+                var, var2 = curVar+str(i), curVar+str(i+1)
+                variables.append(var2)
+                result.append((var, [production[right][i], var2]))
+            result.append((curVar+str(k-2), production[right][k-2:k])) 
+            num += 1
+    productions = result
+    i = 0
+    result = removeUnitProduction(productions, variables)
+    tmp = removeUnitProduction(result, variables)
+    while result != tmp and i < 1000:
+        result = removeUnitProduction(tmp, variables)
+        tmp = removeUnitProduction(result, variables)
+        i+=1
+    productions = result
+    return productions
+
+def displayCNF(rules):
+	dictionary = {}
+	for rule in rules:
+		if rule[left] in dictionary:
+			dictionary[rule[left]] += ' | '+' '.join(rule[right])
+		else:
+			dictionary[rule[left]] = ' '.join(rule[right])
+	result = ""
+	for key in dictionary:
+		result += key+" -> "+dictionary[key]+"\n"
+	return result
+        
 
