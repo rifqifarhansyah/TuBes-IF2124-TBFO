@@ -16,8 +16,6 @@ def read_input(filename):
     """
     Membaca file input.py di folder yang sama dan mengubahnya menjadi sebuah string.
     """
-
-    # filename = os.path.join(os.curdir, ("./test/" + filename))
     with open(filename) as input_file:
         lines = input_file.readlines()
         input_string = ''
