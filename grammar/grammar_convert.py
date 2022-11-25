@@ -3,45 +3,6 @@ import copy
 
 left, right = 0, 1
 
-# def generateBooleanMatrix(n):
-#     res = [[0 for i in range(2**n)] for i in range(n)]
-
-
-# def isEpsilon(prod, productions):
-#     allProd = getAllLeft(productions, prod)
-#     for production in allProd:
-#         if len(production[right]):
-#             return True
-#     return False
-
-# def isEpsilonImmutable(prod, variables, productions):
-#     if isEpsilon(prod, variables, productions):
-#         allLeft = getAllLeft(productions, prod[left])
-#         return len(allLeft) == 1
-#     return False
-
-# def getAllLeft(prod, leftProd):
-#     result = []
-#     for production in prod:
-#         if production[left] == leftProd:
-#             result.append(production)
-#     return result
-
-# def adjustEpsilon(prodList):
-
-
-# def epsilonRoutine(prodList, variables):
-#     newProdList = prodList.copy()
-#     for production in prodList:
-#         if not isEpsilonImmutable(production, variables, prodList):
-#             newProdList.append(production)
-#     toAdd = []
-#     for production in prodList:
-#         if isEpsilon(production, prodList):
-#             allLeft = getAllLeft(production, prodList)
-#         else:
-
-
 def getAllLeft(productions, lhs):
     result = []
     for production in productions:

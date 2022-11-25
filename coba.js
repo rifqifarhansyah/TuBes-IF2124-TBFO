@@ -1,3 +1,7 @@
+// asu babi
+/* pler */
+
+x = 3 
 let x = 10;
 
 switch (x) {
