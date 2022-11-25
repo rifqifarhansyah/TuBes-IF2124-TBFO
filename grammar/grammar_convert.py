@@ -1,43 +1,7 @@
 
+import copy
+
 left, right = 0, 1
-
-# def generateBooleanMatrix(n):
-#     res = [[0 for i in range(2**n)] for i in range(n)]
-
-
-# def isEpsilon(prod, productions):
-#     allProd = getAllLeft(productions, prod)
-#     for production in allProd:
-#         if len(production[right]):
-#             return True
-#     return False
-
-# def isEpsilonImmutable(prod, variables, productions):
-#     if isEpsilon(prod, variables, productions):
-#         allLeft = getAllLeft(productions, prod[left])
-#         return len(allLeft) == 1
-#     return False
-
-# def getAllLeft(prod, leftProd):
-#     result = []
-#     for production in prod:
-#         if production[left] == leftProd:
-#             result.append(production)
-#     return result
-
-# def adjustEpsilon(prodList):
-
-
-# def epsilonRoutine(prodList, variables):
-#     newProdList = prodList.copy()
-#     for production in prodList:
-#         if not isEpsilonImmutable(production, variables, prodList):
-#             newProdList.append(production)
-#     toAdd = []
-#     for production in prodList:
-#         if isEpsilon(production, prodList):
-#             allLeft = getAllLeft(production, prodList)
-#         else:
 
 def getAllLeft(productions, lhs):
     result = []
@@ -46,9 +10,9 @@ def getAllLeft(productions, lhs):
             result.append(production)
     return result
 
-def hasUnitProduction(productions):
-    for production in productions:
-        if isUnitProduction(production):
+def hasUnitProduction(prod, variables):
+    for production in prod:
+        if isUnitProduction(production, variables):
             return True
     return False
 
@@ -60,7 +24,10 @@ def generatingProduction(productions, terminals, variables):
     return result
 
 def isUnitProduction(prod, variables):
-    return prod[left] in variables and len(prod[right]) == 1 and prod[right][0] in variables
+    if prod[left] in variables and len(prod[right]) == 1 and prod[right][0] in variables:
+        return True
+    else:
+        return False
 
 def isSimpleForm(t, var, prod):
     return prod[left] in var and len(prod[right]) == 1 and prod[right][0] in t
@@ -73,14 +40,44 @@ def removeUnitProduction(productions, variables):
         else:
             result.append(production)
     for unitP in unitaries:
-        curUnit = (unitP[left], unitP[right])
-        while (isUnitProduction(curUnit, variables)):
-            for production in productions:
-                if unitP[right] == production[left] and unitP[left] != production[left]:
-                    curUnit = (unitP[left], production[right])
+        for production in productions:
+            if unitP[right] == production[left] and unitP[left] != production[left]:
+                result.append((unitP[left], production[right]))
     return result
 
-# def unitProductionRoutine()
+def unitProductionRoutine(productions, variables):
+    unitaries, result = [], []
+    for production in productions:
+        if isUnitProduction(production, variables):
+            unitaries.append((production[left], production[right]))
+        else:
+            result.append(production)
+    i = 0
+    while hasUnitProduction(unitaries, variables) and i < 500:
+        visited = []
+        for unitP in unitaries:
+            remove = False
+            if (isUnitProduction(unitP, variables)):
+                for production in productions:
+                    if unitP[right][0] == production[left] and unitP[left] != production[left] and not production[left] in visited:
+                        visited.append(production[left])
+                        allSameVar = getAllLeft(productions, production[left])
+                        for same in allSameVar:
+                            currProd = (unitP[left], same[right])
+                            if currProd not in unitaries:
+                                remove = True
+                                unitaries.append(currProd)
+            unitaries.remove(unitP)
+            if not remove:
+                unitaries.append(unitP)
+        i += 1
+
+
+    for unitP in unitaries:
+        result.append(unitP)
+
+    return result
+    
 
 def productionToDictionary(productions):
     res = {}
@@ -90,18 +87,28 @@ def productionToDictionary(productions):
         res[production[left]].append(production[right])
     return res
 
+
 def convertToCNF(productions, terminals, variables):
     
     # Membuat sebuah start state
-    variables.append('S0')
-    productions = [('S0', [variables[0]])] + productions
-
+    nVar = variables + ['S0']
+    rules = [('S0', [variables[0]])] + productions
+    
+    result = removeUnitProduction(rules, nVar)
+    temp = removeUnitProduction(result, nVar)
+    i = 0
+    while result != temp and i < 1000:
+        result = removeUnitProduction(rules, nVar)
+        temp = removeUnitProduction(result, nVar)
+        i += 1
+    rules = result
+    
     # Hapus produksi yang menghasilkan variable dan terminal sekaligus
     new_prod = []
-    dictionary = generatingProduction(productions, terminals, variables)
+    dictionary = generatingProduction(rules, terminals, nVar)
     num = 1
-    for prod in productions:
-        if isSimpleForm(terminals, variables, prod):
+    for prod in rules:
+        if isSimpleForm(terminals, nVar, prod):
             new_prod.append(prod)
         else:
             for t in terminals:
@@ -109,40 +116,32 @@ def convertToCNF(productions, terminals, variables):
                     if t == v and not t in dictionary:
                         dictionary[t] = 'A' + str(num)
                         num += 1
-                        variables.append(dictionary[t])
-                        new_prod.append((dictionary[t], t))
+                        nVar.append(dictionary[t])
+                        new_prod.append((dictionary[t], [t]))
                         prod[right][i] = dictionary[t]
                     elif t == v:
                         prod[right][i] = dictionary[t]
             new_prod.append((prod[left], prod[right]))
-    productions = new_prod
+    rules = new_prod
 
     # Meringkas semua produksi yang menghasilkan lebih dari dua variabel
     result = []
-    for production in productions:
+    for production in rules:
         k = len(production[right])
         if k <= 2:
             result.append(production)
         else:
             curVar = 'A' + str(num)
-            variables.append(curVar+'1')
+            nVar.append(curVar+'1')
             result.append((production[left], [production[right][0]]+[curVar+'1']))
             for i in range(1, k-2 ):
                 var, var2 = curVar+str(i), curVar+str(i+1)
-                variables.append(var2)
+                nVar.append(var2)
                 result.append((var, [production[right][i], var2]))
             result.append((curVar+str(k-2), production[right][k-2:k])) 
             num += 1
-    productions = result
-    i = 0
-    result = removeUnitProduction(productions, variables)
-    tmp = removeUnitProduction(result, variables)
-    while result != tmp and i < 1000:
-        result = removeUnitProduction(tmp, variables)
-        tmp = removeUnitProduction(result, variables)
-        i+=1
-    productions = result
-    return productions
+    rules = result
+    return rules
 
 def displayCNF(rules):
 	dictionary = {}

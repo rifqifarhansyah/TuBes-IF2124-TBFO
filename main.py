@@ -1,6 +1,8 @@
 from grammar import grammar_convert, grammar_parser
 from fileProcessing import token
+from CYK import cyk
 import argparse,os
+import CFGtoCNF
 
 def banner():
     print("                             | |                    ")      
@@ -43,10 +45,15 @@ def verdict():
   convertedTokens = token.createToken(str(args.file.name))
   print(convertedTokens)
   # con = [x.lower() for x in token]
-  CNFgrammar = (grammar_convert((grammar_parser("lib/grammar/cfg.txt"))))
+  t, v, p = grammar_parser.loadGrammar("./grammar/grammar.txt")
+  rule = grammar_convert.convertToCNF(p, t, v)
+  to_display = grammar_convert.displayCNF(rule)
+  print(to_display)
+  rule = grammar_convert.productionToDictionary(rule)
+  verd = cyk.cyk(convertedTokens, rule)
   print("======================VERDICT=========================")
   print()
-  cykParse(token, CNFgrammar)
+  print(verd)
   print()
   print("======================================================")
 
