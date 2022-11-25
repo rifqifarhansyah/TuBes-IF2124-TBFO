@@ -1,5 +1,5 @@
 Terminals:
-id int str dot eq pluseq mineq diveq modeeq poweq ampeq boreq xoreq sreq usreq sleq andeq oreq nullishCoalescingEq inc dec break continue switch case default const var let and or in not neq equal strictEqual gt gte lt lte 
+id int str dot eq pluseq mineq diveq modeq poweq ampeq boreq xoreq sreq usreq sleq andeq oreq nullishCoalescingEq inc dec break continue switch case default const var let and or in not neq equal strictEqual gt gte lt lte 
 plus min bnot mult pow div mod sl sr usr amp bor xor throw try catch finally null true false xbo import from as lc rc comma default if question else delete while with for in 
 function class colon return
 Variables:
@@ -9,6 +9,7 @@ FUNCEXP TUPLE THROW LC RC CF TRY CF FINALLY ARR LB RB SC ARREXP ARRLIST ELMT RB 
 IMPORT DEFWC PKGS EXPORTS EXPORT EXPORTAS COND CONDTAIL DELETE LOOP WITH RET ID ID1 FUNCTION ANONFUNCTION CLASS INHERIT COMMA COLON
 LC RC LB RB LP RP NL SC
 Production:
+SS -> STMTS NL
 STMTS -> STMTS NL STMT | STMTS SC STMT | STMT
 STMT -> COND | LOOP | ASSIGN | IMPORT | FUNCTION | TRY | CONST | VAR | LET | THROW | SWITCH
 STMTLOOP -> STMTLOOP STMTS | STMTLOOP BREAK | STMTLOOP CONT | STMTS | BREAK | CONT
