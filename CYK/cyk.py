@@ -21,5 +21,7 @@ def cyk(w, grammarCNF):
                         if len(prod) == 2:
                             if prod[0] in dp[i][k] and prod[1] in dp[k+1][j]:
                                 dp[i][j].add(var[0])
-    
+    print(len(dp[0]))
+    print(dp[0][length-1])
+    print(dp[0])
     return "S" in dp[0][length-1]
