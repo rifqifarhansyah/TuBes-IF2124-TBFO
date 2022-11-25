@@ -94,6 +94,15 @@ def convertToCNF(productions, terminals, variables):
     nVar = variables + ['S0']
     rules = [('S0', [variables[0]])] + productions
     
+    result = removeUnitProduction(rules, nVar)
+    temp = removeUnitProduction(result, nVar)
+    i = 0
+    while result != temp and i < 1000:
+        result = removeUnitProduction(rules, nVar)
+        temp = removeUnitProduction(result, nVar)
+        i += 1
+    rules = result
+    
     # Hapus produksi yang menghasilkan variable dan terminal sekaligus
     new_prod = []
     dictionary = generatingProduction(rules, terminals, nVar)
@@ -131,14 +140,6 @@ def convertToCNF(productions, terminals, variables):
                 result.append((var, [production[right][i], var2]))
             result.append((curVar+str(k-2), production[right][k-2:k])) 
             num += 1
-    rules = result
-    result = removeUnitProduction(rules, nVar)
-    temp = removeUnitProduction(result, nVar)
-    i = 0
-    while result != temp and i < 1000:
-        result = removeUnitProduction(rules, nVar)
-        temp = removeUnitProduction(result, nVar)
-        i += 1
     rules = result
     return rules
 

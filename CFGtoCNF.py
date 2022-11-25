@@ -159,7 +159,7 @@ def ProdDict(Productions) : # Membuat dictionary untuk production akhir
 
 def convertCFG():   # Mengubah CFG menjadi CNF dengan menggunakan function-function diatas
     Terminal, Variabel, Production = [], [], []
-    grammar = open('./grammar/grammar3.txt').read()
+    grammar = open('./grammar/grammar.txt').read()
     Terminal, Variabel, Production = readGrammarFile(grammar)
     for var in Variabel:    # Apabila ada variabel yang kebetulan sama dengan variabel dalam variablesJar 
         if var in variablesJar: # maka variabel tersebut akan dihapus dari variablesJar agar tidak terjadi ambiguitas pada dictionary

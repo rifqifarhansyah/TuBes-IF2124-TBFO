@@ -22,4 +22,4 @@ def cyk(w, grammarCNF):
                             if prod[0] in dp[i][k] and prod[1] in dp[k+1][j]:
                                 dp[i][j].add(var[0])
     
-    return "S0" in dp[0][length-1]
+    return "S" in dp[0][length-1]
