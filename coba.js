@@ -1,4 +1,10 @@
-let x = 10;
+// asu babi
+/* pler */
+
+x = 3 \\ 3
+oke #&|?!~
+()&><:"{}]\#$%^"
+let x = 10{};
 
 switch (x) {
     case 9:

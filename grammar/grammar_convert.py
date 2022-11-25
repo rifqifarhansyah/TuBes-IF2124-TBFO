@@ -80,7 +80,7 @@ def removeUnitProduction(productions, variables):
                     curUnit = (unitP[left], production[right])
     return result
 
-def unitProductionRoutine()
+# def unitProductionRoutine()
 
 def productionToDictionary(productions):
     res = {}
