@@ -5,12 +5,12 @@ import argparse,os
 
 
 def banner():
-    print("                             | |                    ")      
-    print("          ___ _ __ ___   ___ | |_ ___             ")          
-    print("         / __| '__/ _ \ / _ \| __/ __|          ")                            
-    print("        | (__| | | (_) | (_) | |_\__ \        ")                              
-    print("         \___|_|  \___/ \___/ \__|___/       ")
-
+    print(" ____  __.                       _______                               ") 
+    print("|    |/ _|____    _____  __ __   \      \ _____    ____ ___.__._____   ") 
+    print("|      < \__  \  /     \|  |  \  /   |   \\__  \  /    <   |  |\__  \  ") 
+    print("|    |  \ / __ \|  Y Y  \  |  / /    |    \/ __ \|   |  \___  | / __ \_") 
+    print("|____|__ (____  /__|_|  /____/  \____|__  (____  /___|  / ____|(____  /") 
+    print("        \/    \/      \/                \/     \/     \/\/          \/ ") 
 
 
 def verdict():
@@ -28,15 +28,21 @@ def verdict():
   
   # Token & CNF
   convertedTokens = token.createToken(str(args.file.name))
+#   print(convertedTokens)
+  # con = [x.lower() for x in token]
   t, v, p = grammar_parser.loadGrammar("./grammar/grammar.txt")
   rule = grammar_convert.convertToCNF(p, t, v)
   to_display = grammar_convert.displayCNF(rule)
-  print(to_display)
+#   print(to_display)
   rule = grammar_convert.productionToDictionary(rule)
   verd = cyk.cyk(convertedTokens, rule)
+  res = "Rejected"
+  if verd:
+    res = "Accepted"
+    
   print("======================VERDICT=========================")
   print()
-  print(verd)
+  print(res)
   print()
   print("======================================================")
 
