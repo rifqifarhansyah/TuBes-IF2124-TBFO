@@ -5,6 +5,12 @@ from fileProcessing import token
 # print(p)
 # pDict = grammar_convert.productionToDictionary(p)
 
+from enum import Enum,auto
+
+XBONUM = auto()
+
+print(XBONUM)
+
 
 token = token.createToken("coba.js")
 print(token)
