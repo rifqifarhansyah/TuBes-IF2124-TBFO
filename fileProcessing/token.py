@@ -2,43 +2,42 @@ import os, sys, re
 
 def lexxer(text):
     pos = 0             # Postiton in the text
-    currPos = 1         # position relative to line as if in javascript code
+    posOnLine = 1         # position relative to line as if in javascript code
     line = 1            # current line as in code
     convertedTokens = []
 
     while (pos < len(text)):
         if text[pos] == '\n':
             line += 1
-            currPos = 1
+            posOnLine = 1
 
         flag = None
         for tokenExpr in tokenExprs:
-            pattern, tag = tokenExpr    
+            regPattern, regToken = tokenExpr    
             
-            regex = re.compile(pattern)
+            regex = re.compile(regPattern)
             flag = regex.match(text, pos)
-
+            print(flag)
             if flag:
                 # texts = flag.group(0)
-                if tag:
-                    token = tag
-                    convertedTokens.append(token)
+                if regToken:
+                    convertedTokens.append(regToken)
                 break
 
         if not flag:
-            print(f"\nSYNTAX ERROR\nIllegal character {text[pos]} at line {line} and column {currPos}")
+            print(f"\nSYNTAX ERROR\nIllegal character {text[pos]} at line {line} and column {posOnLine}")
             sys.exit(1)
         else:
             pos = flag.end(0)
-        currPos += 1
+        posOnLine += flag.end(0) - flag.start(0)
 
     return convertedTokens
 
 tokenExprs = [
     # Not token
     (r'[ \t]+',                                      None), # Skip over whitespaces and tabs
-    (r'#[^\n]*',                                     None),
-    (r'\/\*[\n]+[ \t]*[(?!(\*\/))\w\W]\*\/',                    None), # Comments inline
+    # (r'#[^\n]*',                                     None),
+    (r'/\*[\n]*[ \t]*[(?!(/\*\/))\w\W]\*\/',         None), # Comments inline
     (r'[\n]+[ \t]*\'\'\'[(?!(\'\'\'))\w\W]*\'\'\'',  None),
     (r'[\n]+[ \t]*\"\"\"[(?!(\"\"\"))\w\W]*\"\"\"',  None),
     (r'\'\'\'[(?!(\'\'\'))\w\W]*\'\'\'',             "MULTILINE"),
@@ -47,13 +46,13 @@ tokenExprs = [
 
     # Operator
     (r'\^', "XORS"),
-    (r'\&', "ANDS"),
+    (r'&', "ANDS"),
     (r'\|', "ORS"),
-    (r'\!', "SERU"),
+    (r'!', "SERU"),
     (r'\?', "QUEST"),
-    (r'\%', "PERSEN"),
+    (r'%', "PERSEN"),
     (r'\.', "DOTS"),
-    (r'\#', "HASHTAG"),
+    (r'#', "HASHTAG"),
     (r'\$', "DOLLAR"),
     (r'\(', "NBO"),
     (r'\)', "NBC"),
@@ -80,18 +79,12 @@ tokenExprs = [
     (r'\;', "SEMICOLON"),
 
     # Type
+    (r'[0-9]',                  "DIGIT"),
     (r'[\+\-]?[0-9]*\.[0-9]+',  "INT"),
     (r'[\+\-]?[1-9][0-9]+',     "INT"),
     (r'[\+\-]?[0-9]',           "INT"),
     (r'\"[^\"\n]*\"',           "STRING"),
     (r'\'[^\'\n]*\'',           "STRING"),
-    # (r'\bdict\b',               "TYPE"),
-    # (r'\bint\b',                "TYPE"),
-    # (r'\bstr\b',                "TYPE"),
-    # (r'\bfloat\b',              "TYPE"),
-    # (r'\bcomplex\b',            "TYPE"),
-    # (r'\blist\b',               "TYPE"),
-    # (r'\btuple\b',              "TYPE"),
 
     # keyword
     (r'\bnew\b',                "NEWS"),
@@ -149,7 +142,7 @@ def createToken(text):
     characters = file.read()
     file.close()
 
-    tokens = lex(characters)
+    tokens = lexxer(characters)
     tokenResult = []
 
     for token in tokens:

@@ -1,5 +1,6 @@
 from grammar import grammar_convert, grammar_parser
 from fileProcessing import token
+import re
 
 # k, v, p = grammar_parser.loadGrammar("grammar/grammar.txt")
 # print(p)
@@ -7,8 +8,7 @@ from fileProcessing import token
 
 
 token = token.createToken("coba.js")
-print(token, "oke")
-import re
+print(token)
 
 t, v, p = grammar_parser.loadGrammar("./grammar/grammar.txt")
 p = grammar_convert.convertToCNF(p, t, v)
