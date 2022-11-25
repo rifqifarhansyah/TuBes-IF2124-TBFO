@@ -12,19 +12,6 @@ def banner():
     print("         \___|_|  \___/ \___/ \__|___/       ")
 
 
-def read_input(filename):
-    """
-    Membaca file input.py di folder yang sama dan mengubahnya menjadi sebuah string.
-    """
-    with open(filename) as input_file:
-        lines = input_file.readlines()
-        input_string = ''
-
-        for line in lines:
-            input_string += line.strip('\t').strip(' ')
-        
-        input_string += '\n'
-    return input_string
 
 def verdict():
   # Argparse
@@ -41,8 +28,6 @@ def verdict():
   
   # Token & CNF
   convertedTokens = token.createToken(str(args.file.name))
-  print(convertedTokens)
-  # con = [x.lower() for x in token]
   t, v, p = grammar_parser.loadGrammar("./grammar/grammar.txt")
   rule = grammar_convert.convertToCNF(p, t, v)
   to_display = grammar_convert.displayCNF(rule)

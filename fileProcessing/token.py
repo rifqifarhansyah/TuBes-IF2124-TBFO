@@ -144,19 +144,16 @@ def createToken(text):
     file.close()
 
     tokens = lexxer(characters)
-    tokenResult = []
-
-    for token in tokens:
-        tokenResult.append(token)
+   
 
 
     # Write file
     path = os.getcwd()
     fileWrite = open(path + "/result/tokenResult.txt", 'w')
-    for token in tokenResult:
+    for token in tokens:
         fileWrite.write(str(token)+" ")
         # print(token)
     fileWrite.close()
 
-    return tokenResult
+    return tokens
 
