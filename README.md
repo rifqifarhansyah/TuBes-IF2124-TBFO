@@ -42,18 +42,61 @@ Pada tugas besar ini, telah diimplementasikan `parser JavaScript (Node.js)` untu
 
 ## Structure
 ```
+│   coba.js
+│   coba.py
+│   main.py
 │   parser_main.py
 │   README.md
 │
-├───fileProcessing
-│       file.txt
-│       file_processing.py
+├───.vscode
+│       tasks.json
 │
-└───grammar
-        grammar.txt
-        grammar_convert.py
-        grammar_parser.py
-        grammar_processing.py
+├───CYK
+│   │   cyk.py
+│   │   __init__.py
+│   │
+│   └───__pycache__
+│           cyk.cpython-310.pyc
+│           cyk.cpython-39.pyc
+│           __init__.cpython-310.pyc
+│           __init__.cpython-39.pyc
+│
+├───fileProcessing
+│   │   file.txt
+│   │   file_processing.py
+│   │   token.py
+│   │   __init__.py
+│   │
+│   └───__pycache__
+│           token.cpython-310.pyc
+│           token.cpython-39.pyc
+│           __init__.cpython-310.pyc
+│           __init__.cpython-39.pyc
+│
+├───grammar
+│   │   debug_grammar.txt
+│   │   grammar.txt
+│   │   grammar_convert.py
+│   │   grammar_parser.py
+│   │   __init__.py
+│   │
+│   └───__pycache__
+│           grammar_convert.cpython-310.pyc
+│           grammar_convert.cpython-39.pyc
+│           grammar_parser.cpython-310.pyc
+│           grammar_parser.cpython-39.pyc
+│           __init__.cpython-310.pyc
+│           __init__.cpython-39.pyc
+│
+├───result
+│       tokenResult.txt
+│
+├───variable_fa
+│       variable_fa.py
+│
+└───__pycache__
+        CFGtoCNF.cpython-310.pyc
+        CFGtoCNF.cpython-39.pyc
 ```
 
 ## Contact
