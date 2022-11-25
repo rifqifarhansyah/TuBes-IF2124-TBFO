@@ -39,9 +39,18 @@ left, right = 0, 1
 #             allLeft = getAllLeft(production, prodList)
 #         else:
 
-    
+def getAllLeft(productions, lhs):
+    result = []
+    for production in productions:
+        if production[left] == lhs:
+            result.append(production)
+    return result
 
-
+def hasUnitProduction(productions):
+    for production in productions:
+        if isUnitProduction(production):
+            return True
+    return False
 
 def generatingProduction(productions, terminals, variables):
     result = {}
@@ -49,12 +58,12 @@ def generatingProduction(productions, terminals, variables):
         if production[left] in variables and production[right][0] in terminals and len(production[right]) == 1:
             result[production[right][0]] = production[left]
     return result
+
 def isUnitProduction(prod, variables):
     return prod[left] in variables and len(prod[right]) == 1 and prod[right][0] in variables
 
 def isSimpleForm(t, var, prod):
     return prod[left] in var and len(prod[right]) == 1 and prod[right][0] in t
-
 
 def removeUnitProduction(productions, variables):
     unitaries, result = [], []
@@ -71,6 +80,8 @@ def removeUnitProduction(productions, variables):
                     curUnit = (unitP[left], production[right])
     return result
 
+def unitProductionRoutine()
+
 def productionToDictionary(productions):
     res = {}
     for production in productions:
@@ -83,13 +94,7 @@ def convertToCNF(productions, terminals, variables):
     
     # Membuat sebuah start state
     variables.append('S0')
-    productions = [('S0', variables[0])] + productions
-
-    # # Hapus semua epsilon production
-    # new_prod = []
-    # for production in productions:
-    #     if not isEpsilon(production):
-    #         new_prod.append(production)
+    productions = [('S0', [variables[0]])] + productions
 
     # Hapus produksi yang menghasilkan variable dan terminal sekaligus
     new_prod = []
@@ -132,7 +137,7 @@ def convertToCNF(productions, terminals, variables):
     i = 0
     result = removeUnitProduction(productions, variables)
     tmp = removeUnitProduction(result, variables)
-    while result != tmp and i < 1000000:
+    while result != tmp and i < 1000:
         result = removeUnitProduction(tmp, variables)
         tmp = removeUnitProduction(result, variables)
         i+=1

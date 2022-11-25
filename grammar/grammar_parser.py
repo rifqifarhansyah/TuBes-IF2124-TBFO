@@ -9,20 +9,18 @@ def loadGrammar(grammarPath):
 
     pArr = []
     
-    rawProduction = P.replace("\n", "").split(";")
-    rawProduction.pop()
-    rawProduction.pop()
-    rawProduction.append('SEMICOLON -> ;')
+    rawProduction = P.split("\n")
     for production in rawProduction:
+        huhah = production.split(" -> ")
         lhs = production.split(" -> ")[0].replace(" ", '')
-        rhs = production.split(" -> ")[0].split(" | ")
+        rhs = production.split(" -> ")[1].split(" | ")
         for term in rhs:
             pArr.append((lhs, (term.split(" "))))
     
     return T, V, pArr
 
 if __name__ == "__main__":
-    k, v, p = loadGrammar("./grammar/grammar.txt")
+    k, v, p = loadGrammar("./grammar/grammar3.txt")
     print(k)
     print(v)
     print(p)
