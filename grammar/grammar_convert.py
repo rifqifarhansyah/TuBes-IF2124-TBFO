@@ -1,4 +1,6 @@
 
+import copy
+
 left, right = 0, 1
 
 # def generateBooleanMatrix(n):
@@ -39,6 +41,7 @@ left, right = 0, 1
 #             allLeft = getAllLeft(production, prodList)
 #         else:
 
+
 def getAllLeft(productions, lhs):
     result = []
     for production in productions:
@@ -60,9 +63,6 @@ def generatingProduction(productions, terminals, variables):
     return result
 
 def isUnitProduction(prod, variables):
-    a = prod[left] in variables
-    b = len(prod[right]) == 1
-    c = prod[right][0] in variables
     if prod[left] in variables and len(prod[right]) == 1 and prod[right][0] in variables:
         return True
     else:
@@ -91,9 +91,11 @@ def unitProductionRoutine(productions, variables):
             unitaries.append((production[left], production[right]))
         else:
             result.append(production)
-    visited = []
-    while hasUnitProduction(unitaries, variables):
+    i = 0
+    while hasUnitProduction(unitaries, variables) and i < 500:
+        visited = []
         for unitP in unitaries:
+            remove = False
             if (isUnitProduction(unitP, variables)):
                 for production in productions:
                     if unitP[right][0] == production[left] and unitP[left] != production[left] and not production[left] in visited:
@@ -102,8 +104,13 @@ def unitProductionRoutine(productions, variables):
                         for same in allSameVar:
                             currProd = (unitP[left], same[right])
                             if currProd not in unitaries:
+                                remove = True
                                 unitaries.append(currProd)
             unitaries.remove(unitP)
+            if not remove:
+                unitaries.append(unitP)
+        i += 1
+
 
     for unitP in unitaries:
         result.append(unitP)
@@ -119,12 +126,12 @@ def productionToDictionary(productions):
         res[production[left]].append(production[right])
     return res
 
+
 def convertToCNF(productions, terminals, variables):
     
     # Membuat sebuah start state
     nVar = variables + ['S0']
     rules = [('S0', [variables[0]])] + productions
-
     
     # Hapus produksi yang menghasilkan variable dan terminal sekaligus
     new_prod = []
@@ -140,7 +147,7 @@ def convertToCNF(productions, terminals, variables):
                         dictionary[t] = 'A' + str(num)
                         num += 1
                         nVar.append(dictionary[t])
-                        new_prod.append((dictionary[t], t))
+                        new_prod.append((dictionary[t], [t]))
                         prod[right][i] = dictionary[t]
                     elif t == v:
                         prod[right][i] = dictionary[t]
@@ -164,7 +171,13 @@ def convertToCNF(productions, terminals, variables):
             result.append((curVar+str(k-2), production[right][k-2:k])) 
             num += 1
     rules = result
-    result = unitProductionRoutine(rules, nVar)
+    result = removeUnitProduction(rules, nVar)
+    temp = removeUnitProduction(result, nVar)
+    i = 0
+    while result != temp and i < 1000:
+        result = removeUnitProduction(rules, nVar)
+        temp = removeUnitProduction(result, nVar)
+        i += 1
     rules = result
     return rules
 
