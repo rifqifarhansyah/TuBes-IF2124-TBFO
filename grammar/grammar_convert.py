@@ -3,19 +3,6 @@ import copy
 
 left, right = 0, 1
 
-def getAllLeft(productions, lhs):
-    result = []
-    for production in productions:
-        if production[left] == lhs:
-            result.append(production)
-    return result
-
-def hasUnitProduction(prod, variables):
-    for production in prod:
-        if isUnitProduction(production, variables):
-            return True
-    return False
-
 def generatingProduction(productions, terminals, variables):
     result = {}
     for production in productions:
@@ -45,40 +32,6 @@ def removeUnitProduction(productions, variables):
                 result.append((unitP[left], production[right]))
     return result
 
-def unitProductionRoutine(productions, variables):
-    unitaries, result = [], []
-    for production in productions:
-        if isUnitProduction(production, variables):
-            unitaries.append((production[left], production[right]))
-        else:
-            result.append(production)
-    i = 0
-    while hasUnitProduction(unitaries, variables) and i < 500:
-        visited = []
-        for unitP in unitaries:
-            remove = False
-            if (isUnitProduction(unitP, variables)):
-                for production in productions:
-                    if unitP[right][0] == production[left] and unitP[left] != production[left] and not production[left] in visited:
-                        visited.append(production[left])
-                        allSameVar = getAllLeft(productions, production[left])
-                        for same in allSameVar:
-                            currProd = (unitP[left], same[right])
-                            if currProd not in unitaries:
-                                remove = True
-                                unitaries.append(currProd)
-            unitaries.remove(unitP)
-            if not remove:
-                unitaries.append(unitP)
-        i += 1
-
-
-    for unitP in unitaries:
-        result.append(unitP)
-
-    return result
-    
-
 def productionToDictionary(productions):
     res = {}
     for production in productions:
@@ -102,7 +55,7 @@ def convertToCNF(productions, terminals, variables):
         temp = removeUnitProduction(result, nVar)
         i += 1
     rules = result
-    
+
     # Hapus produksi yang menghasilkan variable dan terminal sekaligus
     new_prod = []
     dictionary = generatingProduction(rules, terminals, nVar)
