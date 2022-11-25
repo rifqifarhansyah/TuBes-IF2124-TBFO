@@ -2,31 +2,15 @@ from grammar import grammar_convert, grammar_parser
 from fileProcessing import token
 from CYK import cyk
 import argparse,os
-import CFGtoCNF
 
 def banner():
-    print("                             | |                    ")      
-    print("          ___ _ __ ___   ___ | |_ ___             ")          
-    print("         / __| '__/ _ \ / _ \| __/ __|          ")                            
-    print("        | (__| | | (_) | (_) | |_\__ \        ")                              
-    print("         \___|_|  \___/ \___/ \__|___/       ")
+    print(" ____  __.                       _______                               ") 
+    print("|    |/ _|____    _____  __ __   \      \ _____    ____ ___.__._____   ") 
+    print("|      < \__  \  /     \|  |  \  /   |   \\__  \  /    <   |  |\__  \  ") 
+    print("|    |  \ / __ \|  Y Y  \  |  / /    |    \/ __ \|   |  \___  | / __ \_") 
+    print("|____|__ (____  /__|_|  /____/  \____|__  (____  /___|  / ____|(____  /") 
+    print("        \/    \/      \/                \/     \/     \/\/          \/ ") 
 
-
-def read_input(filename):
-    """
-    Membaca file input.py di folder yang sama dan mengubahnya menjadi sebuah string.
-    """
-
-    # filename = os.path.join(os.curdir, ("./test/" + filename))
-    with open(filename) as input_file:
-        lines = input_file.readlines()
-        input_string = ''
-
-        for line in lines:
-            input_string += line.strip('\t').strip(' ')
-        
-        input_string += '\n'
-    return input_string
 
 def verdict():
   # Argparse
@@ -43,17 +27,21 @@ def verdict():
   
   # Token & CNF
   convertedTokens = token.createToken(str(args.file.name))
-  print(convertedTokens)
+#   print(convertedTokens)
   # con = [x.lower() for x in token]
   t, v, p = grammar_parser.loadGrammar("./grammar/grammar.txt")
   rule = grammar_convert.convertToCNF(p, t, v)
   to_display = grammar_convert.displayCNF(rule)
-  print(to_display)
+#   print(to_display)
   rule = grammar_convert.productionToDictionary(rule)
   verd = cyk.cyk(convertedTokens, rule)
+  res = "Rejected"
+  if verd:
+    res = "Accepted"
+    
   print("======================VERDICT=========================")
   print()
-  print(verd)
+  print(res)
   print()
   print("======================================================")
 

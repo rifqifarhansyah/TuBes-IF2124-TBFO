@@ -4,7 +4,7 @@ def cyk(w, grammarCNF):
     length = len(w)
 
     # Setup matriks set untuk algoritma CYK
-    dp = [[set([]) for i in range(length)] for j in range(length)]
+    dp = [[set() for i in range(length)] for j in range(length)]
 
     for i in range(length):
         for var in grammarCNF.items():

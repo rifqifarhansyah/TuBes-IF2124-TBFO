@@ -1,7 +1,7 @@
 Terminals:
 id int str dot eq pluseq mineq diveq modeq poweq ampeq boreq xoreq sreq usreq sleq andeq oreq nullishCoalescingEq inc dec break continue switch case default const var let and or in not neq equal strictEqual gt gte lt lte 
 plus min bnot mult pow div mod sl sr usr amp bor xor throw try catch finally null true false xbo import from as lc rc comma default if question else delete while with for in 
-function class colon return
+function class colon return nl
 Variables:
 S STMTS NL STMT COND LOOP ASSIGN IMPORT FUNCTION TRY CONST VAR LET THROW SWITCH STMTLOOP BREAK CONT EXP PAREXP DOTEXP LOGICEXP MATHEXP FUNCEXP ANONFUNCTION ARR ARREXP ELMT DICT TUPLE LIT DOTEXPR
 ASSIGN ASSIGNCHAIN ASSIGNCHAIN1 ASSIGNOP COMMA CONT SWITCH LP LC RP RC CASES DEFAULT CASE LP LIT STMTLOOP SC DEFAULT CONST VAR LET LOGICEXP RELOP MATHEXP MATHOP1 MATHOP2 
@@ -9,7 +9,7 @@ FUNCEXP TUPLE THROW LC RC CF TRY CF FINALLY ARR LB RB SC ARREXP ARRLIST ELMT RB 
 IMPORT DEFWC PKGS EXPORTS EXPORT EXPORTAS COND CONDTAIL DELETE LOOP WITH RET ID ID1 FUNCTION ANONFUNCTION CLASS INHERIT COMMA COLON
 LC RC LB RB LP RP NL SC
 Production:
-SS -> STMTS NL
+S -> STMTS NL | NL | STMTS
 STMTS -> STMTS NL STMT | STMTS SC STMT | STMT
 STMT -> COND | LOOP | ASSIGN | IMPORT | FUNCTION | TRY | CONST | VAR | LET | THROW | SWITCH
 STMTLOOP -> STMTLOOP STMTS | STMTLOOP BREAK | STMTLOOP CONT | STMTS | BREAK | CONT
