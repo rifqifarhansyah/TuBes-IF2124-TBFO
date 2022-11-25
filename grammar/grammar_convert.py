@@ -1,11 +1,47 @@
 
 left, right = 0, 1
 
-def isUnitProduction(prod, variables):
-    return prod[left] in variables and len(prod[right]) == 1 and prod[right][0] in variables
+# def generateBooleanMatrix(n):
+#     res = [[0 for i in range(2**n)] for i in range(n)]
 
-def isSimpleForm(t, var, prod):
-    return prod[left] in var and len(prod[right]) == 1 and prod[right][0] in t
+
+# def isEpsilon(prod, productions):
+#     allProd = getAllLeft(productions, prod)
+#     for production in allProd:
+#         if len(production[right]):
+#             return True
+#     return False
+
+# def isEpsilonImmutable(prod, variables, productions):
+#     if isEpsilon(prod, variables, productions):
+#         allLeft = getAllLeft(productions, prod[left])
+#         return len(allLeft) == 1
+#     return False
+
+# def getAllLeft(prod, leftProd):
+#     result = []
+#     for production in prod:
+#         if production[left] == leftProd:
+#             result.append(production)
+#     return result
+
+# def adjustEpsilon(prodList):
+
+
+# def epsilonRoutine(prodList, variables):
+#     newProdList = prodList.copy()
+#     for production in prodList:
+#         if not isEpsilonImmutable(production, variables, prodList):
+#             newProdList.append(production)
+#     toAdd = []
+#     for production in prodList:
+#         if isEpsilon(production, prodList):
+#             allLeft = getAllLeft(production, prodList)
+#         else:
+
+    
+
+
 
 def generatingProduction(productions, terminals, variables):
     result = {}
@@ -13,6 +49,12 @@ def generatingProduction(productions, terminals, variables):
         if production[left] in variables and production[right][0] in terminals and len(production[right]) == 1:
             result[production[right][0]] = production[left]
     return result
+def isUnitProduction(prod, variables):
+    return prod[left] in variables and len(prod[right]) == 1 and prod[right][0] in variables
+
+def isSimpleForm(t, var, prod):
+    return prod[left] in var and len(prod[right]) == 1 and prod[right][0] in t
+
 
 def removeUnitProduction(productions, variables):
     unitaries, result = [], []
@@ -22,9 +64,11 @@ def removeUnitProduction(productions, variables):
         else:
             result.append(production)
     for unitP in unitaries:
-        for production in productions:
-            if unitP[right] == production[left] and unitP[left] != production[left]:
-                result.append((unitP[left], production[right]))
+        curUnit = (unitP[left], unitP[right])
+        while (isUnitProduction(curUnit, variables)):
+            for production in productions:
+                if unitP[right] == production[left] and unitP[left] != production[left]:
+                    curUnit = (unitP[left], production[right])
     return result
 
 def productionToDictionary(productions):
@@ -40,6 +84,12 @@ def convertToCNF(productions, terminals, variables):
     # Membuat sebuah start state
     variables.append('S0')
     productions = [('S0', variables[0])] + productions
+
+    # # Hapus semua epsilon production
+    # new_prod = []
+    # for production in productions:
+    #     if not isEpsilon(production):
+    #         new_prod.append(production)
 
     # Hapus produksi yang menghasilkan variable dan terminal sekaligus
     new_prod = []
@@ -82,7 +132,7 @@ def convertToCNF(productions, terminals, variables):
     i = 0
     result = removeUnitProduction(productions, variables)
     tmp = removeUnitProduction(result, variables)
-    while result != tmp and i < 1000:
+    while result != tmp and i < 1000000:
         result = removeUnitProduction(tmp, variables)
         tmp = removeUnitProduction(result, variables)
         i+=1
